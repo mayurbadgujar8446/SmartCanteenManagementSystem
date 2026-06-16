@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OTP Verification</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: url("BGG.jpg") no-repeat center center/cover;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(1px);
+    }
+
+    .otp-box {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 15px;
+      padding: 40px 50px;
+      width: 380px;
+      color: #fff;
+      text-align: center;
+      box-shadow: 0 0 25px rgba(0,0,0,0.5);
+    }
+
+    .otp-box h2 {
+      margin-bottom: 25px;
+      font-size: 28px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .otp-inputs {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    .otp-inputs input {
+      width: 45px;
+      height: 50px;
+      text-align: center;
+      font-size: 22px;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.3);
+      color: #000;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    .otp-inputs input:focus {
+      background: rgba(255,255,255,0.6);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      outline: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #4CAF50, #2e7d32);
+      color: #fff;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: linear-gradient(135deg, #66bb6a, #388e3c);
+    }
+
+    .links {
+      margin-top: 18px;
+      font-size: 14px;
+    }
+
+    .links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="otp-box">
+    <h2>Enter OTP</h2>
+    <p>Please enter the 6-digit code sent to your email.</p>
+
+    <form id="otpForm">
+      <div class="otp-inputs">
+        <input type="text" maxlength="1" required>
+        <input type="text" maxlength="1" required>
+        <input type="text" maxlength="1" required>
+        <input type="text" maxlength="1" required>
+        <input type="text" maxlength="1" required>
+        <input type="text" maxlength="1" required>
+      </div>
+      <button class="btn" type="submit">Verify OTP</button>
+      <div class="links">
+        <p>Didn’t receive code? <a href="#">Resend OTP</a></p>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const inputs = document.querySelectorAll('.otp-inputs input');
+    inputs.forEach((input, index) => {
+      input.addEventListener('input', () => {
+        if (input.value.length === 1 && index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+      });
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !input.value && index > 0) {
+          inputs[index - 1].focus();
+        }
+      });
+    });
+
+    document.getElementById('otpForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      let otp = '';
+      inputs.forEach(input => otp += input.value);
+      if (otp.length === 6) {
+        alert(OTP Verified: ${otp});
+        // Redirect or handle verification here
+      } else {
+        alert("Please enter a valid 6-digit OTP");
+      }
+    });
+  </script>
+</body>
+</html>

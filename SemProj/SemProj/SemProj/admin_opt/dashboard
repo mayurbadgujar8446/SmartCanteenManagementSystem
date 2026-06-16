@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Menu</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      /* 👇 Corrected image path */
+      background: url("../BGG1.jpg") no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.5);
+      width: 400px;
+      margin: 100px auto;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 8px #000;
+    }
+
+    a, button {
+      display: block;
+      width: 80%;
+      padding: 10px;
+      margin: 8px auto;
+      border: none;
+      border-radius: 8px;
+      background-color: rgba(255, 255, 255, 0.2);
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    a:hover, button:hover {
+      background-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .submenu {
+      display: none;
+      background-color: rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      padding: 10px;
+      margin: 10px auto;
+      width: 80%;
+      text-align: left;
+    }
+
+    .submenu a {
+      display: block;
+      padding: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      color: white;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .submenu a:last-child {
+      border-bottom: none;
+    }
+
+    .submenu a:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Dashboard Menu</h1>
+
+    <a href="login.html">Login</a>
+    <a href="total-sale.html">Total Sale</a>
+
+    <div>
+      <button onclick="toggleMenu('editMenu')">Edit Menu ▼</button>
+      <div id="editMenu" class="submenu">
+        <a href="item-name.html">Item Name</a>
+        <a href="item-price.html">Item Price</a>
+      </div>
+    </div>
+
+    <a href="change-balance.html">Change User Balance</a>
+
+    <div>
+      <button onclick="toggleMenu('userData')">User Data ▼</button>
+      <div id="userData" class="submenu">
+        <a href="specific-user.html">Specific User</a>
+        <a href="all-user.html">All User</a>
+      </div>
+    </div>
+
+    <a href="delete-user.html">Delete User</a>
+    <a href="see-complaints.html">See Complaints</a>
+  </div>
+
+  <script>
+    function toggleMenu(id) {
+      const menu = document.getElementById(id);
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
+  </script>
+</body>
+</html>

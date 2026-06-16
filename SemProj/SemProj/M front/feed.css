@@ -1,0 +1,178 @@
+/* Basic Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Background */
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #89f7fe, #6faafd);
+}
+
+/* Wrapper for centering */
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+/* Feedback Card */
+.feedback-box {
+  background: rgba(255, 255, 255, 0.9);
+  width: 420px;
+  padding: 35px 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  transition: all 0.4s ease-in-out;
+}
+
+.feedback-box:hover {
+  transform: scale(1.02);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Heading and intro */
+.feedback-box h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+.feedback-box p {
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 25px;
+}
+
+/* Labels */
+label {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* Inputs, Selects, and Textarea */
+input, select, textarea {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 18px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  background: #f5f7fa;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+  background: #fff;
+}
+
+/* Button styling */
+button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(90deg, #007bff, #00b4d8);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: linear-gradient(90deg, #0056b3, #0077b6);
+  transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .feedback-box {
+    width: 90%;
+    padding: 25px 20px;
+  }
+
+  .feedback-box h1 {
+    font-size: 20px;
+  }
+}
+
+/* Popup styling */
+.popup {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #28a745;
+  color: white;
+  padding: 25px 35px;
+  border-radius: 20px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 250px;
+  z-index: 1000;
+  animation: fadeIn 2s;
+}
+
+.popup .close-btn {
+  cursor: pointer;
+  margin-left: 15px;
+  font-weight: bold;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Position the action button at bottom-right */
+.action {
+  position: fixed;          
+  bottom: 20px;             
+  right: 20px;              
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: linear-gradient(90deg, #ff7e5f, #feb47b);
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  z-index: 1000;            /* Make sure it stays above other content */
+}
+
+/* Hover effect */
+.action:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(90deg, #feb47b, #ff7e5f);
+}
+
+
+/* Emoji style */
+.action .emoji {
+  font-size: 18px;
+}
+
+/* Label style */
+.action .label {
+  font-size: 14px;
+}

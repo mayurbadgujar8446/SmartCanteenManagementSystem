@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Change User Balance - Admin Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background: url("{{ url_for('static', filename='images/BGG1.jpg') }}") no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      max-width: 500px;
+      margin: 50px auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .back-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      margin-bottom: 30px;
+    }
+
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #ddd;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 15px;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.3);
+      color: #000;
+      font-size: 16px;
+      transition: 0.3s;
+      box-sizing: border-box;
+    }
+
+    input:focus {
+      background: rgba(255,255,255,0.5);
+      outline: none;
+    }
+
+    input::placeholder {
+      color: #666;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #4CAF50, #2e7d32);
+      color: #fff;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 10px;
+    }
+
+    .btn:hover {
+      background: linear-gradient(135deg, #66bb6a, #388e3c);
+    }
+
+    .flash-messages {
+      margin-bottom: 20px;
+    }
+
+    .flash-message {
+      padding: 10px 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .flash-success {
+      background: rgba(76, 175, 80, 0.7);
+      color: white;
+    }
+
+    .flash-error {
+      background: rgba(244, 67, 54, 0.7);
+      color: white;
+    }
+
+    .warning {
+      background: rgba(255, 152, 0, 0.2);
+      border: 1px solid rgba(255, 152, 0, 0.5);
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+
+    .warning-icon {
+      font-size: 1.2rem;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="{{ url_for('admin_dashboard') }}" class="back-btn">← Back to Dashboard</a>
+    
+    <h1>💳 Change User Balance</h1>
+
+    <div class="warning">
+      <span class="warning-icon">⚠️</span>
+      <strong>Warning:</strong> This action will directly modify the user's balance. Use with caution.
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for message in messages %}
+            <div class="flash-message flash-success">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('admin_change_balance') }}">
+      <div class="form-group">
+        <label for="email">User Email Address</label>
+        <input type="email" id="email" name="email" placeholder="Enter user's email address" required>
+      </div>
+
+      <div class="form-group">
+        <label for="balance">New Balance (₹)</label>
+        <input type="number" id="balance" name="balance" step="0.01" min="0" placeholder="Enter new balance amount" required>
+      </div>
+
+      <button type="submit" class="btn">Update Balance</button>
+    </form>
+
+    <div style="margin-top: 30px; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px; font-size: 14px;">
+      <h4>Instructions:</h4>
+      <ul>
+        <li>Enter the user's registered email address</li>
+        <li>Enter the new balance amount (must be positive)</li>
+        <li>The user will be notified of the balance change</li>
+        <li>This action cannot be undone</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

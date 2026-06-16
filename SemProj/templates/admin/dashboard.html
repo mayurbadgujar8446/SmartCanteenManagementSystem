@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Recess Bites</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: url("{{ url_for('static', filename='images/BGG1.jpg') }}") no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.5);
+      width: 500px;
+      margin: 100px auto;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 8px #000;
+      font-size: 2.5rem;
+      color: #fff;
+    }
+
+    .admin-info {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      text-align: center;
+      color: white;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    a, button {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.2);
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    a:hover, button:hover {
+      background-color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .submenu {
+      display: none;
+      background-color: rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      padding: 10px;
+      margin: 10px 0;
+      text-align: left;
+    }
+
+    .submenu a {
+      display: block;
+      padding: 8px 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      color: white;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      margin: 0;
+    }
+
+    .submenu a:last-child {
+      border-bottom: none;
+    }
+
+    .submenu a:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      transform: none;
+    }
+
+    .logout-btn {
+      background: linear-gradient(135deg, #f44336, #d32f2f) !important;
+      margin-top: 20px;
+    }
+
+    .logout-btn:hover {
+      background: linear-gradient(135deg, #e57373, #f44336) !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🛠️ Admin Dashboard</h1>
+    
+    <div class="admin-info">
+      <p><strong>Admin:</strong> {{ session.user_email }}</p>
+      <p><strong>Access Level:</strong> Full Control</p>
+    </div>
+
+    <div class="menu-grid">
+      <a href="{{ url_for('admin_total_sales') }}">📈 Total Sales</a>
+
+      <a href="{{ url_for('admin_edit_menu') }}">🍴 Edit Menu</a>
+
+      <a href="{{ url_for('admin_change_balance') }}">💳 Change User Balance</a>
+
+      <div>
+        <button onclick="toggleMenu('userData')">👥 User Data ▼</button>
+        <div id="userData" class="submenu">
+          <a href="{{ url_for('admin_specific_user') }}">👤 Specific User</a>
+          <a href="{{ url_for('admin_all_users') }}">👥 All Users</a>
+        </div>
+      </div>
+
+      <a href="{{ url_for('admin_delete_user') }}">❌ Delete User</a>
+      <a href="{{ url_for('admin_complaints') }}">📋 See Complaints</a>
+    </div>
+
+    <a href="{{ url_for('logout') }}" class="logout-btn">🚪 Logout</a>
+  </div>
+
+  <script>
+    function toggleMenu(id) {
+      const menu = document.getElementById(id);
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
+  </script>
+</body>
+</html>

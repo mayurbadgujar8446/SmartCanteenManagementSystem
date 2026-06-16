@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Total Sales - Admin Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background: url("{{ url_for('static', filename='images/BGG1.jpg') }}") no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .back-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.2);
+      font-weight: 600;
+    }
+
+    tr:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .total-box {
+      background: linear-gradient(135deg, #4CAF50, #2e7d32);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .total-amount {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="{{ url_for('admin_dashboard') }}" class="back-btn">← Back to Dashboard</a>
+    
+    <h1>📈 Total Sales Report</h1>
+
+    {% if sales %}
+    <table>
+      <thead>
+        <tr>
+          <th>No.</th>
+          <th>Item</th>
+          <th>Quantity Sold</th>
+          <th>Revenue (₹)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for sale in sales %}
+        <tr>
+          <td>{{ sale[0] }}</td>
+          <td>{{ sale[1] }}</td>
+          <td>{{ sale[2] }}</td>
+          <td>₹{{ sale[3] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="total-box">
+      <div class="total-amount">₹{{ total }}</div>
+      <div>Total Revenue</div>
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 40px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+      <p>No sales data available yet.</p>
+    </div>
+    {% endif %}
+  </div>
+</body>
+</html>

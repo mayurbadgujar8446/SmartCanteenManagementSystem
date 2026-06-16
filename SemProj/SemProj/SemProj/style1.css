@@ -1,0 +1,122 @@
+:root{
+  --bg: #f6f8fb;
+  --card: #ffffff;
+  --accent: #2563eb; /* blue */
+  --accent-2: #06b6d4; /* teal */
+  --text: #0f172a;
+  --muted: #64748b;
+  --danger: #ef4444;
+  --radius: 14px;
+  --glass: rgba(255,255,255,0.6);
+}
+
+.container{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:32px;
+}
+.header h1{
+  margin:0 0 6px 0;
+  font-size:1.6rem;
+  letter-spacing: -0.2px;
+}
+
+/* Actions grid */
+.actions{
+  width:100%;
+  max-width:880px;
+  display:grid;
+  gap:14px;
+  grid-template-columns: repeat(autos-fit, minmax(220px, 1fr));
+  padding:22px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.85));
+  border-radius: var(--radius);
+  box-shadow: 0 8px 30px rgba(12, 24, 64, 0.12);
+  border: 1px solid rgba(15,23,42,0.04);
+}
+
+/* Button style */
+.action{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:18px;
+  border-radius:10px;
+  border: none;
+  background: var(--card);
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+  font-size:1rem;
+  text-align:left;
+  box-shadow: 0 4px 20px rgba(12,24,64,0.06);
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.action:focus{
+  box-shadow: 0 6px 30px rgba(37,99,235,0.18);
+  transform: translateY(-3px);
+}
+.action:hover{
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(12,24,64,0.12);
+}
+
+.emoji{
+  font-size:1.9rem;
+  width:48px;
+  height:48px;
+  display:inline-grid;
+  place-items:center;
+  border-radius:10px;
+  background: linear-gradient(180deg, rgba(6,182,212,0.08), rgba(37,99,235,0.06));
+}
+
+/* Label area */
+.label{
+  display:block;
+  font-weight:600;
+  color:var(--text);
+}
+
+/* Danger (logout) */
+.action.danger{
+  background: linear-gradient(90deg, rgba(255,245,245,1), var(--card));
+  border: 1px solid rgba(239,68,68,0.08);
+}
+.action.danger .emoji{
+  background: linear-gradient(180deg, rgba(239,68,68,0.08), rgba(239,68,68,0.04));
+}
+
+/* Small screens tweak */
+@media (max-width:420px){
+  .actions { padding:12px; gap:10px; }
+  .action { padding:14px; gap:10px; }
+  .emoji{ width:40px; height:40px; font-size:1.6rem; border-radius:8px; }
+  .header h1 { font-size:1.3rem; }
+}
+#deposit .emoji { background: linear-gradient(180deg, rgba(34,197,94,0.06), rgba(34,197,94,0.03)); }
+#withdraw .emoji { background: linear-gradient(180deg, rgba(250,204,21,0.06), rgba(250,204,21,0.03)); }
+#balance .emoji { background: linear-gradient(180deg, rgba(99,102,241,0.06), rgba(99,102,241,0.03)); }
+#transfer .emoji { background: linear-gradient(180deg, rgba(6,182,212,0.06), rgba(6,182,212,0.03)); }
+#Feedback .emoji { background: linear-gradient(180deg, rgba(168,85,247,0.06), rgba(168,85,247,0.03)); }
+#order .emoji { background: linear-gradient(180deg, rgba(34,197,94,0.06), rgba(34,197,94,0.03)); }
+#orderhistory .emoji { background: linear-gradient(180deg, rgba(234,88,12,0.06), rgba(234,88,12,0.03)); }
+#transactionhistory .emoji { background: linear-gradient(180deg, rgba(107,114,128,0.06), rgba(107,114,128,0.03)); }
+#offers .emoji { background: linear-gradient(180deg, rgba(6,182,212,0.06), rgba(6,182,212,0.03)); }
+
+body {
+  /* Background image setup */
+  background: url("BGG1.jpg") no-repeat center center fixed;
+
+  /* Make it cover the whole screen */
+  background-size: cover;
+
+  /* Optional styling */
+  font-family: Arial, sans-serif;
+  color: white;
+  text-align: center;
+  margin: 0;
+  padding-top: 200px;
+}

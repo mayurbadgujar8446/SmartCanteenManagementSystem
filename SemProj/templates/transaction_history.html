@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History - Recess Bites</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: url("{{ url_for('static', filename='images/BGG1.jpg') }}") no-repeat center center/cover;
+            min-height: 100vh;
+            padding: 20px;
+            backdrop-filter: blur(1px);
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+            color: white;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            color: #2196F3;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .transaction-grid {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .transaction-item {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .transaction-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .transaction-item.credit {
+            border-left: 4px solid #4CAF50;
+        }
+
+        .transaction-item.debit {
+            border-left: 4px solid #f44336;
+        }
+
+        .transaction-details {
+            flex: 1;
+        }
+
+        .transaction-type {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .transaction-date {
+            font-size: 0.85rem;
+            color: #bbb;
+        }
+
+        .transaction-amount {
+            text-align: right;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .amount-credit {
+            color: #4CAF50;
+        }
+
+        .amount-debit {
+            color: #f44336;
+        }
+
+        .no-transactions {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            color: #aaa;
+        }
+
+        .no-transactions h3 {
+            margin-bottom: 15px;
+            color: #666;
+        }
+
+        .summary {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+
+        .summary-item h4 {
+            color: #4CAF50;
+            margin-bottom: 8px;
+        }
+
+        .summary-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .credit-total {
+            color: #4CAF50;
+        }
+
+        .debit-total {
+            color: #f44336;
+        }
+
+        @media (max-width: 768px) {
+            .transaction-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .transaction-amount {
+                text-align: center;
+                margin-top: 10px;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('user_dashboard') }}" class="back-btn">← Back to Dashboard</a>
+        
+        <div class="header">
+            <h1>💳 Transaction History</h1>
+            <p>Your complete financial activity</p>
+        </div>
+
+        {% if transactions %}
+        <div class="transaction-grid">
+            {% for transaction in transactions %}
+            <div class="transaction-item {% if transaction[2] > 0 %}credit{% else %}debit{% endif %}">
+                <div class="transaction-details">
+                    <div class="transaction-type">
+                        {% if transaction[2] > 0 %}
+                            💰 Money Received
+                        {% else %}
+                            💸 Money Spent
+                        {% endif %}
+                    </div>
+                    <div class="transaction-date">{{ transaction[1] }}</div>
+                </div>
+                <div class="transaction-amount {% if transaction[2] > 0 %}amount-credit{% else %}amount-debit{% endif %}">
+                    {% if transaction[2] > 0 %}
+                        +₹{{ transaction[2] }}
+                    {% else %}
+                        ₹{{ transaction[2] }}
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="summary">
+            <div class="summary-item">
+                <h4>📊 Total Transactions</h4>
+                <div class="summary-value">{{ transactions|length }}</div>
+            </div>
+            <div class="summary-item">
+                <h4>💚 Money Received</h4>
+                <div class="summary-value credit-total">
+                    +₹{{ transactions|selectattr(2, 'gt', 0)|map(attribute=2)|sum|round(2) }}
+                </div>
+            </div>
+            <div class="summary-item">
+                <h4>💔 Money Spent</h4>
+                <div class="summary-value debit-total">
+                    ₹{{ transactions|selectattr(2, 'lt', 0)|map(attribute=2)|sum|round(2) }}
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="no-transactions">
+            <h3>💳 No Transactions Yet</h3>
+            <p>You haven't made any transactions yet.</p>
+            <p>Start by depositing money or making a purchase!</p>
+            <br>
+            <a href="{{ url_for('user_dashboard') }}" style="color: #4CAF50; text-decoration: none; font-weight: bold;">
+                🏠 Back to Dashboard
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

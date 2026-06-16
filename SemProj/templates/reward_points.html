@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reward Points - Recess Bites</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: url("{{ url_for('static', filename='images/BGG1.jpg') }}") no-repeat center center/cover;
+            min-height: 100vh;
+            padding: 20px;
+            backdrop-filter: blur(1px);
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+            color: white;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            color: #FF9800;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .points-display {
+            background: linear-gradient(135deg, #FF9800, #F57C00);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+        }
+
+        .points-number {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .points-label {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .points-value {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid rgba(255,255,255,0.3);
+            font-size: 1.1rem;
+        }
+
+        .redemption-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .redemption-section h3 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .redeem-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .input-group label {
+            min-width: 120px;
+            color: #ddd;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            font-size: 16px;
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .redeem-btn {
+            background: linear-gradient(135deg, #4CAF50, #2e7d32);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .redeem-btn:hover {
+            background: linear-gradient(135deg, #66bb6a, #388e3c);
+        }
+
+        .redeem-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+
+        .info-box {
+            background: rgba(33, 150, 243, 0.2);
+            border: 1px solid rgba(33, 150, 243, 0.5);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-box h4 {
+            color: #2196F3;
+            margin-bottom: 10px;
+        }
+
+        .info-list {
+            list-style: none;
+            color: #ddd;
+        }
+
+        .info-list li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .info-list li::before {
+            content: "✨";
+            position: absolute;
+            left: 0;
+        }
+
+        .no-points {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            color: #aaa;
+        }
+
+        .no-points h3 {
+            margin-bottom: 15px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .points-number {
+                font-size: 2.5rem;
+            }
+            
+            .input-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .input-group label {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('user_dashboard') }}" class="back-btn">← Back to Dashboard</a>
+        
+        <div class="header">
+            <h1>🎁 Reward Points</h1>
+            <p>Your loyalty rewards</p>
+        </div>
+
+        <div class="points-display">
+            <div class="points-number">{{ points }}</div>
+            <div class="points-label">RB Points Available</div>
+            <div class="points-value">
+                💰 Worth: ₹{{ points }} (1 point = ₹1)
+            </div>
+        </div>
+
+        {% if points > 0 %}
+        <div class="redemption-section">
+            <h3>💸 Redeem Points</h3>
+            <div class="redeem-form">
+                <div class="input-group">
+                    <label for="points-to-redeem">Points to Redeem:</label>
+                    <input type="number" id="points-to-redeem" min="1" max="{{ points }}" placeholder="Enter points">
+                </div>
+                <div class="input-group">
+                    <label for="money-equivalent">Money Equivalent:</label>
+                    <input type="text" id="money-equivalent" readonly placeholder="₹0">
+                </div>
+                <button class="redeem-btn" onclick="redeemPoints()">
+                    🎯 Redeem Points
+                </button>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="info-box">
+            <h4>📋 How to Earn Points?</h4>
+            <ul class="info-list">
+                <li>Spend ₹100 or more in a single order</li>
+                <li>Earn 10% of your bill amount as RB points</li>
+                <li>Points can be redeemed as money (1 point = ₹1)</li>
+                <li>Use points for future purchases or withdraw as cash</li>
+            </ul>
+        </div>
+
+        {% if points == 0 %}
+        <div class="no-points">
+            <h3>🎁 Start Earning Points!</h3>
+            <p>Make orders worth ₹100 or more to earn reward points.</p>
+            <p>Every ₹100 spent = 10 RB points!</p>
+            <br>
+            <a href="{{ url_for('show_menu') }}" style="color: #4CAF50; text-decoration: none; font-weight: bold;">
+                🍴 Browse Menu
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // Update money equivalent when points input changes
+        document.getElementById('points-to-redeem')?.addEventListener('input', function() {
+            const points = parseInt(this.value) || 0;
+            const moneyEquivalent = document.getElementById('money-equivalent');
+            if (moneyEquivalent) {
+                moneyEquivalent.value = `₹${points}`;
+            }
+        });
+
+        function redeemPoints() {
+            const pointsToRedeem = parseInt(document.getElementById('points-to-redeem').value);
+            const availablePoints = {{ points }};
+            
+            if (!pointsToRedeem || pointsToRedeem <= 0) {
+                alert('❌ Please enter a valid number of points to redeem');
+                return;
+            }
+            
+            if (pointsToRedeem > availablePoints) {
+                alert(`❌ You only have ${availablePoints} points available`);
+                return;
+            }
+            
+            const confirmation = confirm(`🎯 Redeem ${pointsToRedeem} points for ₹${pointsToRedeem}?\n\nThis will add ₹${pointsToRedeem} to your balance.`);
+            
+            if (confirmation) {
+                fetch('/redeem-points', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        points: pointsToRedeem
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`✅ ${data.message}\n\n🎁 Remaining Points: ${data.new_points}\n💰 New Balance: ₹${data.new_balance}`);
+                        location.reload(); // Refresh to show updated points
+                    } else {
+                        alert(`❌ ${data.message}`);
+                    }
+                })
+                .catch(error => {
+                    alert('Error redeeming points. Please try again.');
+                    console.error('Error:', error);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

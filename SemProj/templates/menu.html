@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canteen Menu - Recess Bites</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: url("{{ url_for('static', filename='images/BGG1.jpg') }}") no-repeat center center/cover;
+            min-height: 100vh;
+            padding: 20px;
+            backdrop-filter: blur(1px);
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+            color: white;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            color: #4CAF50;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .menu-item {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .menu-item.unavailable {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .menu-item.unavailable:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .item-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+
+        .item-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #FF9800;
+            margin-bottom: 15px;
+        }
+
+        .availability {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .available {
+            background: rgba(76, 175, 80, 0.3);
+            color: #4CAF50;
+            border: 1px solid #4CAF50;
+        }
+
+        .not-available {
+            background: rgba(244, 67, 54, 0.3);
+            color: #f44336;
+            border: 1px solid #f44336;
+        }
+
+        .quantity-input {
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .quantity-input input {
+            width: 60px;
+            padding: 8px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 5px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .add-to-cart {
+            background: linear-gradient(135deg, #4CAF50, #2e7d32);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background: linear-gradient(135deg, #66bb6a, #388e3c);
+        }
+
+        .add-to-cart:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+
+        .cart-summary {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            position: sticky;
+            top: 20px;
+            margin-top: 30px;
+        }
+
+        .cart-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #4CAF50;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .cart-total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid rgba(255,255,255,0.3);
+            color: #FF9800;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #FF9800, #F57C00);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        .checkout-btn:hover {
+            background: linear-gradient(135deg, #FFB74D, #FF9800);
+        }
+
+        .empty-cart {
+            text-align: center;
+            color: #aaa;
+            padding: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('user_dashboard') }}" class="back-btn">← Back to Dashboard</a>
+        
+        <div class="header">
+            <h1>🍽️ Canteen Menu</h1>
+            <p>Fresh & Delicious Food Awaits!</p>
+        </div>
+
+        <div class="menu-grid">
+            {% for item in menu_items %}
+            <div class="menu-item {% if item[3] == 'No' %}unavailable{% endif %}">
+                <div class="item-name">{{ item[1] }}</div>
+                <div class="item-price">₹{{ item[2] }}</div>
+                <div class="availability">
+                    <span class="{% if item[3] == 'Yes' %}available{% else %}not-available{% endif %}">
+                        {% if item[3] == 'Yes' %}✅ Available{% else %}❌ Not Available{% endif %}
+                    </span>
+                </div>
+                
+                {% if item[3] == 'Yes' %}
+                <div class="quantity-input">
+                    <label for="qty-{{ item[0] }}">Qty:</label>
+                    <input type="number" id="qty-{{ item[0] }}" min="1" max="10" value="1">
+                </div>
+                <button class="add-to-cart" onclick="addToCart({{ item[0] }}, '{{ item[1] }}', {{ item[2] }})">
+                    Add to Cart
+                </button>
+                {% else %}
+                <button class="add-to-cart" disabled>
+                    Currently Unavailable
+                </button>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="cart-summary">
+            <div class="cart-title">🛒 Your Order</div>
+            <div id="cart-items">
+                <div class="empty-cart">Your cart is empty</div>
+            </div>
+            <div class="cart-total" id="cart-total" style="display: none;">
+                Total: ₹0
+            </div>
+            <button class="checkout-btn" id="checkout-btn" style="display: none;" onclick="checkout()">
+                Place Order 🚀
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+        let total = 0;
+
+        function addToCart(itemId, itemName, itemPrice) {
+            const qtyInput = document.getElementById(`qty-${itemId}`);
+            const quantity = parseInt(qtyInput.value);
+            
+            if (quantity < 1) {
+                alert('Please enter a valid quantity');
+                return;
+            }
+
+            // Check if item already in cart
+            const existingItem = cart.find(item => item.id === itemId);
+            
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({
+                    id: itemId,
+                    name: itemName,
+                    price: itemPrice,
+                    quantity: quantity
+                });
+            }
+            
+            updateCartDisplay();
+            qtyInput.value = 1; // Reset quantity
+            
+            // Show success message
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Added! ✅';
+            button.style.background = '#4CAF50';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = '';
+            }, 1500);
+        }
+
+        function updateCartDisplay() {
+            const cartItemsDiv = document.getElementById('cart-items');
+            const cartTotalDiv = document.getElementById('cart-total');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            
+            if (cart.length === 0) {
+                cartItemsDiv.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+                cartTotalDiv.style.display = 'none';
+                checkoutBtn.style.display = 'none';
+                return;
+            }
+            
+            let cartHtml = '';
+            total = 0;
+            
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                cartHtml += `
+                    <div class="cart-item">
+                        <span>${item.name} x${item.quantity}</span>
+                        <span>₹${itemTotal}
+                            <button onclick="removeFromCart(${index})" style="margin-left: 10px; background: #f44336; color: white; border: none; border-radius: 3px; padding: 2px 5px; cursor: pointer;">✖</button>
+                        </span>
+                    </div>
+                `;
+            });
+            
+            cartItemsDiv.innerHTML = cartHtml;
+            cartTotalDiv.innerHTML = `Total: ₹${total}`;
+            cartTotalDiv.style.display = 'block';
+            checkoutBtn.style.display = 'block';
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartDisplay();
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            
+            const confirmation = confirm(`Place order for ₹${total}?\n\nThis will deduct the amount from your balance.`);
+            
+            if (confirmation) {
+                // Send order to server
+                fetch('/place-order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        cart: cart
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`✅ ${data.message}\n\nYour order will be ready in 10-15 minutes!`);
+                        
+                        // Clear cart
+                        cart = [];
+                        total = 0;
+                        updateCartDisplay();
+                    } else {
+                        alert(`❌ ${data.message}`);
+                    }
+                })
+                .catch(error => {
+                    alert('Error placing order. Please try again.');
+                    console.error('Error:', error);
+                });
+            }
+        }
+
+        // Initialize cart display
+        updateCartDisplay();
+    </script>
+</body>
+</html>

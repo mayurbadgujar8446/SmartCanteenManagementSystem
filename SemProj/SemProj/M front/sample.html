@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rainbow Text</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #111;
+    }
+
+    h1 {
+      font-size: 60px;
+      font-weight: bold;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, rgb(255, 72, 72), rgb(141, 111, 56), rgb(255, 255, 0), rgb(3, 153, 3), rgb(47, 47, 232), rgb(55, 0, 95), rgb(230, 79, 230));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbow 3s linear infinite;
+    }
+
+    @keyframes rainbow {
+      to {
+        background-position: 400% 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Rainbow Text 🌈</h1>
+</body>
+</html>

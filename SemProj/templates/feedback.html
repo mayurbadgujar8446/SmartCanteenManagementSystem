@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback - Recess Bites</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: url("{{ url_for('static', filename='images/BGG1.jpg') }}") no-repeat center center/cover;
+            min-height: 100vh;
+            padding: 20px;
+            backdrop-filter: blur(1px);
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+            color: white;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            color: #FF9800;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .form-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ddd;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            font-size: 16px;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            background: rgba(255,255,255,0.3);
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #4CAF50, #2e7d32);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #66bb6a, #388e3c);
+        }
+
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        .flash-message {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .flash-success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.5);
+            color: #4CAF50;
+        }
+
+        .flash-error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid rgba(244, 67, 54, 0.5);
+            color: #f44336;
+        }
+
+        .info-box {
+            background: rgba(33, 150, 243, 0.2);
+            border: 1px solid rgba(33, 150, 243, 0.5);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .info-box h4 {
+            color: #2196F3;
+            margin-bottom: 10px;
+        }
+
+        .info-list {
+            list-style: none;
+            color: #ddd;
+            margin: 0;
+        }
+
+        .info-list li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .info-list li::before {
+            content: "💡";
+            position: absolute;
+            left: 0;
+        }
+
+        /* Rating System Styles */
+        .rating-container {
+            margin: 10px 0;
+        }
+
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .star-rating input[type="radio"] {
+            display: none;
+        }
+
+        .star-rating label {
+            font-size: 30px;
+            color: #555;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
+
+        .star-rating label:hover,
+        .star-rating label:hover ~ label,
+        .star-rating input[type="radio"]:checked ~ label {
+            color: #FFD700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+        }
+
+        .rating-text {
+            color: #aaa;
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        /* Category Ratings */
+        .category-ratings {
+            display: grid;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .category-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .category-label {
+            font-weight: 500;
+            min-width: 130px;
+            color: #ddd;
+        }
+
+        .category-select {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        /* Form enhancements */
+        .form-group select option {
+            background: #333;
+            color: white;
+            padding: 10px;
+        }
+
+        .form-section {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+@media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .category-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .category-label {
+                min-width: auto;
+                margin-bottom: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('user_dashboard') }}" class="back-btn">← Back to Dashboard</a>
+        
+        <div class="header">
+            <h1>🙋 Feedback & Complaints</h1>
+            <p>Help us improve our service</p>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <div class="flash-message flash-success">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="info-box">
+            <h4>📋 How to Submit Enhanced Feedback</h4>
+            <ul class="info-list">
+                <li>Rate your overall experience with our interactive star system</li>
+                <li>Rate specific aspects: food quality, service speed, cleanliness, and staff behavior</li>
+                <li>Select the appropriate feedback/complaint type for better categorization</li>
+                <li>Choose priority level to help us address urgent issues quickly</li>
+                <li>Provide detailed description to help us understand your experience</li>
+                <li>All feedback is reviewed by management and used to improve our service</li>
+            </ul>
+        </div>
+
+        <div class="form-section">
+            <form method="POST">
+                <!-- Overall Rating Section -->
+                <div class="form-group">
+                    <label for="overall_rating">🌟 Overall Experience Rating:</label>
+                    <div class="rating-container">
+                        <div class="star-rating">
+                            <input type="radio" id="star5" name="overall_rating" value="5">
+                            <label for="star5" title="Excellent">⭐</label>
+                            <input type="radio" id="star4" name="overall_rating" value="4">
+                            <label for="star4" title="Good">⭐</label>
+                            <input type="radio" id="star3" name="overall_rating" value="3">
+                            <label for="star3" title="Average">⭐</label>
+                            <input type="radio" id="star2" name="overall_rating" value="2">
+                            <label for="star2" title="Poor">⭐</label>
+                            <input type="radio" id="star1" name="overall_rating" value="1">
+                            <label for="star1" title="Very Poor">⭐</label>
+                        </div>
+                        <span class="rating-text">Select your overall rating</span>
+                    </div>
+                </div>
+
+                <!-- Service Categories Rating -->
+                <div class="form-group">
+                    <label>📊 Rate Different Aspects:</label>
+                    <div class="category-ratings">
+                        <div class="category-item">
+                            <span class="category-label">🍽️ Food Quality:</span>
+                            <select name="food_quality_rating" class="category-select">
+                                <option value="">Rate Food Quality</option>
+                                <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                                <option value="4">⭐⭐⭐⭐ Good</option>
+                                <option value="3">⭐⭐⭐ Average</option>
+                                <option value="2">⭐⭐ Poor</option>
+                                <option value="1">⭐ Very Poor</option>
+                            </select>
+                        </div>
+                        <div class="category-item">
+                            <span class="category-label">⚡ Service Speed:</span>
+                            <select name="service_speed_rating" class="category-select">
+                                <option value="">Rate Service Speed</option>
+                                <option value="5">⭐⭐⭐⭐⭐ Very Fast</option>
+                                <option value="4">⭐⭐⭐⭐ Fast</option>
+                                <option value="3">⭐⭐⭐ Average</option>
+                                <option value="2">⭐⭐ Slow</option>
+                                <option value="1">⭐ Very Slow</option>
+                            </select>
+                        </div>
+                        <div class="category-item">
+                            <span class="category-label">🧹 Cleanliness:</span>
+                            <select name="cleanliness_rating" class="category-select">
+                                <option value="">Rate Cleanliness</option>
+                                <option value="5">⭐⭐⭐⭐⭐ Very Clean</option>
+                                <option value="4">⭐⭐⭐⭐ Clean</option>
+                                <option value="3">⭐⭐⭐ Average</option>
+                                <option value="2">⭐⭐ Needs Improvement</option>
+                                <option value="1">⭐ Poor</option>
+                            </select>
+                        </div>
+                        <div class="category-item">
+                            <span class="category-label">👥 Staff Behavior:</span>
+                            <select name="staff_behavior_rating" class="category-select">
+                                <option value="">Rate Staff Behavior</option>
+                                <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                                <option value="4">⭐⭐⭐⭐ Good</option>
+                                <option value="3">⭐⭐⭐ Average</option>
+                                <option value="2">⭐⭐ Poor</option>
+                                <option value="1">⭐ Very Poor</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Complaint Type Section -->
+                <div class="form-group">
+                    <label for="complaint_type">📋 Feedback/Complaint Type:</label>
+                    <select id="complaint_type" name="complaint_type" required>
+                        <option value="">Select feedback type</option>
+                        <option value="Food Quality">🍽️ Food Quality Issue</option>
+                        <option value="Service Issue">⚡ Service Issue</option>
+                        <option value="Staff Behavior">👥 Staff Behavior</option>
+                        <option value="Cleanliness">🧹 Cleanliness/Hygiene</option>
+                        <option value="Pricing">💰 Pricing Concern</option>
+                        <option value="Menu Request">📄 Menu Request/Suggestion</option>
+                        <option value="Facility Issue">🏢 Facility Issue</option>
+                        <option value="Payment Issue">💳 Payment/Billing Issue</option>
+                        <option value="Positive Feedback">🌟 Positive Feedback</option>
+                        <option value="General Suggestion">💡 General Suggestion</option>
+                        <option value="Other">📝 Other</option>
+                    </select>
+                </div>
+
+                <!-- Priority Level -->
+                <div class="form-group">
+                    <label for="priority">🚨 Issue Priority:</label>
+                    <select id="priority" name="priority" required>
+                        <option value="">Select priority level</option>
+                        <option value="Low">🟢 Low - General feedback/suggestion</option>
+                        <option value="Medium">🟡 Medium - Issue needs attention</option>
+                        <option value="High">🔴 High - Urgent issue requiring immediate action</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="staff_name">👤 Staff Member Name (if applicable):</label>
+                    <input type="text" id="staff_name" name="staff_name" 
+                           placeholder="Enter staff name (optional)">
+                </div>
+
+                <div class="form-group">
+                    <label for="complaint">📝 Detailed Description:</label>
+                    <textarea id="complaint" name="complaint" 
+                              placeholder="Please provide detailed information about your experience, suggestion, or concern. The more specific you are, the better we can address your feedback..." 
+                              required></textarea>
+                </div>
+
+                <!-- Contact Preference -->
+                <div class="form-group">
+                    <label for="contact_preference">📞 Would you like a response?</label>
+                    <select id="contact_preference" name="contact_preference">
+                        <option value="No">No response needed</option>
+                        <option value="Email">Yes, respond via email</option>
+                        <option value="In-Person">Yes, I'll visit in person</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    📤 Submit Feedback
+                </button>
+            </form>
+        </div>
+
+        <div style="text-align: center; color: #aaa; font-size: 14px; margin-top: 20px;">
+            <p>🛡️ Your feedback is anonymous and helps us serve you better</p>
+            <p>📧 Submitted from: {{ session.user_email }}</p>
+        </div>
+    </div>
+
+    <script>
+        // Update rating text based on selection
+        document.addEventListener('DOMContentLoaded', function() {
+            const starInputs = document.querySelectorAll('.star-rating input[type="radio"]');
+            const ratingText = document.querySelector('.rating-text');
+            
+            starInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    const rating = this.value;
+                    const labels = {
+                        '1': '😟 Very Poor - We need to improve',
+                        '2': '😔 Poor - Below expectations', 
+                        '3': '😐 Average - Okay service',
+                        '4': '😊 Good - Above expectations',
+                        '5': '🤩 Excellent - Outstanding service!'
+                    };
+                    ratingText.textContent = labels[rating] || 'Select your overall rating';
+                });
+            });
+            
+            // Form validation enhancement
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function(e) {
+                const overallRating = document.querySelector('input[name="overall_rating"]:checked');
+                const complaintType = document.getElementById('complaint_type').value;
+                const priority = document.getElementById('priority').value;
+                const description = document.getElementById('complaint').value.trim();
+                
+                if (!overallRating) {
+                    e.preventDefault();
+                    alert('⭐ Please provide an overall rating before submitting your feedback.');
+                    return;
+                }
+                
+                if (!complaintType) {
+                    e.preventDefault();
+                    alert('📋 Please select a feedback/complaint type.');
+                    return;
+                }
+                
+                if (!priority) {
+                    e.preventDefault();
+                    alert('🚨 Please select a priority level.');
+                    return;
+                }
+                
+                if (description.length < 10) {
+                    e.preventDefault();
+                    alert('📝 Please provide a detailed description (at least 10 characters).');
+                    return;
+                }
+                
+                // Show submission loading
+                const submitBtn = document.querySelector('.submit-btn');
+                submitBtn.innerHTML = '🔄 Submitting...';
+                submitBtn.disabled = true;
+            });
+            
+            // Character counter for description
+            const textArea = document.getElementById('complaint');
+            const charCounter = document.createElement('div');
+            charCounter.style.cssText = 'font-size: 12px; color: #aaa; text-align: right; margin-top: 5px;';
+            textArea.parentNode.appendChild(charCounter);
+            
+            textArea.addEventListener('input', function() {
+                const length = this.value.length;
+                charCounter.textContent = `${length} characters`;
+                
+                if (length < 10) {
+                    charCounter.style.color = '#f44336';
+                } else if (length < 50) {
+                    charCounter.style.color = '#FF9800';
+                } else {
+                    charCounter.style.color = '#4CAF50';
+                }
+            });
+            
+            // Trigger initial character count
+            textArea.dispatchEvent(new Event('input'));
+        });
+    </script>
+</body>
+</html>

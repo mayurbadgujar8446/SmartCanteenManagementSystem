@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Users - Admin Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background: url("{{ url_for('static', filename='images/BGG1.jpg') }}") no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .back-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .user-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .user-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .user-card:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-3px);
+    }
+
+    .user-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #4CAF50;
+    }
+
+    .user-detail {
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .label {
+      font-weight: 500;
+      color: #ddd;
+    }
+
+    .value {
+      color: white;
+    }
+
+    .balance {
+      color: #4CAF50 !important;
+      font-weight: bold;
+    }
+
+    .points {
+      color: #FF9800 !important;
+      font-weight: bold;
+    }
+
+    .stats {
+      background: linear-gradient(135deg, #2196F3, #1976D2);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="{{ url_for('admin_dashboard') }}" class="back-btn">← Back to Dashboard</a>
+    
+    <h1>👥 All Registered Users</h1>
+
+    {% if users %}
+    <div class="stats">
+      <h3>Total Users: {{ users|length }}</h3>
+    </div>
+
+    <div class="user-grid">
+      {% for user in users %}
+      <div class="user-card">
+        <div class="user-name">{{ user[1] }} {{ user[2] }}</div>
+        <div class="user-detail">
+          <span class="label">Email:</span>
+          <span class="value">{{ user[0] }}</span>
+        </div>
+        <div class="user-detail">
+          <span class="label">Balance:</span>
+          <span class="value balance">₹{{ user[4] }}</span>
+        </div>
+        <div class="user-detail">
+          <span class="label">RB Points:</span>
+          <span class="value points">{{ user[5] }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 40px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+      <p>No users registered yet.</p>
+    </div>
+    {% endif %}
+  </div>
+</body>
+</html>

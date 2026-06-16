@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: url("BGG.jpg") no-repeat center center/cover;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(1px);
+    }
+
+    .login-box {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 15px;
+      padding: 40px 50px;
+      width: 360px;
+      color: #fff;
+      text-align: center;
+      box-shadow: 0 0 25px rgba(0,0,0,0.5);
+    }
+
+    .login-box h2 {
+      margin-bottom: 25px;
+      font-size: 30px;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: 1px;
+    }
+
+    .input-box {
+      position: relative;
+      margin-bottom: 25px;
+    }
+
+    .input-box input {
+      width: 100%;
+      padding: 12px 15px;
+      border: none;
+      outline: none;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.3);
+      color: #000; /* text color inside input */
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    .input-box input:focus {
+      background: rgba(255,255,255,0.5);
+    }
+
+    .input-box input::placeholder {
+      color: #000; /* changed to black */
+      font-weight: 500;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      outline: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #4CAF50, #2e7d32);
+      color: #fff;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: linear-gradient(135deg, #66bb6a, #388e3c);
+    }
+
+    .links {
+      margin-top: 18px;
+      font-size: 14px;
+    }
+
+    .links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>Login</h2>
+    <form>
+      <div class="input-box">
+        <input type="email" placeholder="Email" required>
+      </div>
+      <div class="input-box">
+        <input type="password" placeholder="Password" required>
+      </div>
+      <button class="btn">Login</button>
+      <div class="links">
+        <p>Don't have an account? <a href="#">Register</a></p>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

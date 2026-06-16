@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Canteen Feedback / Complaint</title>
+  <link rel="stylesheet" href="feed.css" />
+</head>
+<body>
+  <div class="wrapper">
+    <div class="feedback-box">
+      <h1>🍽️ Canteen Feedback / Complaint</h1>
+      <p>We appreciate your time! Please share your honest feedback to help us improve.</p>
+
+      <form class="feedback-form" id="feedbackForm">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+        <label for="type">Select Type</label>
+        <select id="type" name="type" required>
+          <option value=""> Select Type </option>
+          <option value="feedback">Feedback</option>
+          <option value="complaint">Complaint</option>
+        </select>
+
+        <label for="complaintType">Type of Complaint / Feedback</label>
+        <select id="complaintType" name="complaintType" required>
+          <option value=""> Choose an option </option>
+          <option value="food_quality">🍛 Food Quality</option>
+          <option value="hygiene">🧼 Hygiene & Cleanliness</option>
+          <option value="staff_behavior">👨‍🍳 Staff Behavior</option>
+          <option value="price">💰 Price Issue</option>
+          <option value="delay">⏱️ Service Delay</option>
+          <option value="other">📝 Other</option>
+        </select>
+
+        <label for="message">Your Feedback / Complaint</label>
+        <textarea id="message" name="message" rows="5" placeholder="Type your message here..." required></textarea>
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Popup Message -->
+  <div id="popupMessage" class="popup">
+    ✅ Thank you for your feedback! We appreciate it.
+    <span class="close-btn" onclick="closePopup()">&times;</span>
+  </div>
+
+  <script>
+    const form = document.getElementById('feedbackForm');
+    const popup = document.getElementById('popupMessage');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault(); // Prevent form submission/reload
+      popup.style.display = 'flex';
+      form.reset(); // Clear form fields
+    });
+
+    function closePopup() {
+      popup.style.display = 'none';
+    }
+  </script>
+  <a href="chose.html" class="action" id="Back"><span class="emoji">🔙</span><span class="label">Back</span></a>
+</body>
+</html>

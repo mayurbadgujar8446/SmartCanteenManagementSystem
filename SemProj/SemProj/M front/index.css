@@ -1,0 +1,61 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+
+    background: url("BGG.jpg") no-repeat center center fixed;
+    background-size: cover;
+    background-color: #f4f6f9;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.transparent-box {
+    background: rgba(255, 255, 255, 0.75);
+    width: 40%;
+    height: auto;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.3);
+    text-align: center;
+}
+
+h1 {
+    color: #0080ff;
+}
+
+/* Button container to align buttons side by side */
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Space between buttons */
+    margin-top: 30px;
+}
+
+/* Button style */
+.action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(90deg, #ff7e5f, #feb47b);
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.action:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+    background: linear-gradient(90deg, #feb47b, #ff7e5f);
+}

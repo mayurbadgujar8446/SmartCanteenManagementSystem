@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Recess Bites</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: url("{{ url_for('static', filename='images/BGG1.jpg') }}") no-repeat center center/cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(1px);
+        }
+
+        .transparent-box {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 50px;
+            text-align: center;
+            color: #fff;
+            box-shadow: 0 0 25px rgba(0,0,0,0.5);
+            max-width: 500px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #f0f0f0;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .action {
+            display: inline-block;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #4CAF50, #2e7d32);
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            min-width: 120px;
+        }
+
+        .action:hover {
+            background: linear-gradient(135deg, #66bb6a, #388e3c);
+            transform: translateY(-2px);
+        }
+
+        .label {
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+            .button-group {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="transparent-box">
+        <h1>🍽️ Welcome to Recess Bites 🍽️</h1>
+        <p>Your Digital Canteen Experience</p>
+
+        <div class="button-group">
+            <a href="{{ url_for('login') }}" class="action" id="Login">
+                <span class="label">Login</span>
+            </a>
+            <a href="{{ url_for('signup') }}" class="action" id="Signup">
+                <span class="label">Signup</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

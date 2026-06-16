@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delete User - Admin Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background: url("{{ url_for('static', filename='images/BGG1.jpg') }}") no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      max-width: 500px;
+      margin: 50px auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      color: #f44336;
+    }
+
+    .back-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      margin-bottom: 30px;
+    }
+
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .warning {
+      background: rgba(255, 152, 0, 0.2);
+      border: 1px solid rgba(255, 152, 0, 0.5);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+      color: #fff;
+    }
+
+    .warning-icon {
+      font-size: 1.5rem;
+      margin-right: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #ddd;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      font-size: 16px;
+      box-sizing: border-box;
+      transition: 0.3s;
+    }
+
+    .form-group input:focus {
+      background: rgba(255,255,255,0.3);
+      outline: none;
+      border-color: #f44336;
+    }
+
+    .form-group input::placeholder {
+      color: rgba(255,255,255,0.6);
+    }
+
+    .delete-btn {
+      background: linear-gradient(135deg, #f44336, #d32f2f);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .delete-btn:hover {
+      background: linear-gradient(135deg, #e57373, #f44336);
+    }
+
+    .flash-messages {
+      margin-bottom: 20px;
+    }
+
+    .flash-message {
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .flash-success {
+      background: rgba(76, 175, 80, 0.2);
+      border: 1px solid rgba(76, 175, 80, 0.5);
+      color: #4CAF50;
+    }
+
+    .flash-error {
+      background: rgba(244, 67, 54, 0.2);
+      border: 1px solid rgba(244, 67, 54, 0.5);
+      color: #f44336;
+    }
+
+    .info-box {
+      background: rgba(244, 67, 54, 0.1);
+      border: 1px solid rgba(244, 67, 54, 0.3);
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .info-box h4 {
+      color: #f44336;
+      margin-bottom: 10px;
+    }
+
+    .info-list {
+      list-style: none;
+      color: #ddd;
+      margin: 0;
+    }
+
+    .info-list li {
+      margin-bottom: 8px;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .info-list li::before {
+      content: "⚠️";
+      position: absolute;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="{{ url_for('admin_dashboard') }}" class="back-btn">← Back to Dashboard</a>
+    
+    <h1>❌ Delete User Account</h1>
+
+    <div class="warning">
+      <span class="warning-icon">⚠️</span>
+      <strong>DANGER ZONE:</strong> This action will permanently delete the user account and cannot be undone.
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for message in messages %}
+            <div class="flash-message {% if 'success' in message or 'deleted' in message %}flash-success{% else %}flash-error{% endif %}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" onsubmit="return confirmDeletion()">
+      <div class="form-group">
+        <label for="email">User Email Address:</label>
+        <input type="email" id="email" name="email" 
+               placeholder="Enter the email of the user to delete" required>
+      </div>
+
+      <button type="submit" class="delete-btn">
+        🗑️ DELETE USER PERMANENTLY
+      </button>
+    </form>
+
+    <div class="info-box">
+      <h4>⚠️ What will be deleted:</h4>
+      <ul class="info-list">
+        <li>User account and profile information</li>
+        <li>All order history</li>
+        <li>All transaction records</li>
+        <li>Balance and reward points</li>
+        <li>User will be notified via email</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    function confirmDeletion() {
+      const email = document.getElementById('email').value;
+      if (!email) {
+        alert('Please enter an email address');
+        return false;
+      }
+      
+      const confirmation = confirm(
+        `⚠️ PERMANENT DELETION WARNING ⚠️\n\n` +
+        `Are you absolutely sure you want to delete the user account:\n${email}\n\n` +
+        `This action will:\n` +
+        `• Delete all user data permanently\n` +
+        `• Remove all order and transaction history\n` +
+        `• Cannot be undone\n\n` +
+        `Type "DELETE" in the next prompt to confirm.`
+      );
+      
+      if (confirmation) {
+        const finalConfirm = prompt('Type "DELETE" to confirm permanent deletion:');
+        if (finalConfirm === "DELETE") {
+          return true;
+        } else {
+          alert('Deletion cancelled - incorrect confirmation text');
+          return false;
+        }
+      }
+      return false;
+    }
+  </script>
+</body>
+</html>

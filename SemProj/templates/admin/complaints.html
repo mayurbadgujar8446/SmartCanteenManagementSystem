@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complaints - Admin Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background: url("{{ url_for('static', filename='images/BGG1.jpg') }}") no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .back-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .complaints-grid {
+      display: grid;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .complaint-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 20px;
+      border-left: 4px solid #FF9800;
+      transition: all 0.3s ease;
+    }
+
+    .complaint-card:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .complaint-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .staff-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #FF9800;
+    }
+
+    .complaint-text {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 15px;
+      border-radius: 8px;
+      line-height: 1.6;
+      color: #f0f0f0;
+      border-left: 3px solid rgba(255, 152, 0, 0.3);
+      white-space: pre-line;
+    }
+
+    .priority-badge {
+      padding: 4px 12px;
+      border-radius: 15px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .priority-high {
+      background: rgba(244, 67, 54, 0.2);
+      color: #f44336;
+      border: 1px solid rgba(244, 67, 54, 0.5);
+    }
+
+    .priority-medium {
+      background: rgba(255, 152, 0, 0.2);
+      color: #FF9800;
+      border: 1px solid rgba(255, 152, 0, 0.5);
+    }
+
+    .priority-low {
+      background: rgba(76, 175, 80, 0.2);
+      color: #4CAF50;
+      border: 1px solid rgba(76, 175, 80, 0.5);
+    }
+
+    .rating-display {
+      color: #FFD700;
+      margin: 8px 0;
+    }
+
+    .feedback-meta {
+      background: rgba(33, 150, 243, 0.1);
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      border: 1px solid rgba(33, 150, 243, 0.3);
+      font-size: 14px;
+    }
+
+    .feedback-type {
+      display: inline-block;
+      background: rgba(156, 39, 176, 0.2);
+      color: #9C27B0;
+      padding: 4px 8px;
+      border-radius: 10px;
+      font-size: 12px;
+      margin-right: 10px;
+    }
+
+    .no-complaints {
+      text-align: center;
+      padding: 60px 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      color: #aaa;
+    }
+
+    .no-complaints h3 {
+      margin-bottom: 15px;
+      color: #666;
+    }
+
+    .stats {
+      background: linear-gradient(135deg, #2196F3, #1976D2);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .stats h3 {
+      margin-bottom: 10px;
+    }
+
+    .complaint-actions {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      padding: 8px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    .resolve-btn {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .resolve-btn:hover {
+      background: #66bb6a;
+    }
+
+    .delete-btn {
+      background: #f44336;
+      color: white;
+    }
+
+    .delete-btn:hover {
+      background: #e57373;
+    }
+
+    @media (max-width: 768px) {
+      .complaint-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .container {
+        padding: 20px;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="{{ url_for('admin_dashboard') }}" class="back-btn">← Back to Dashboard</a>
+    
+    <h1>📋 Customer Complaints & Feedback</h1>
+
+    {% if complaints %}
+    <div class="stats">
+      <h3>Total Complaints: {{ complaints|length }}</h3>
+      <p>Review and address customer concerns to improve service quality</p>
+    </div>
+
+    <div class="complaints-grid">
+      {% for complaint in complaints %}
+      <div class="complaint-card">
+        <div class="complaint-header">
+          <div class="staff-name">
+            {% if 'Food Quality' in complaint[0] %}🍽️
+            {% elif 'Service' in complaint[0] %}⚡
+            {% elif 'Staff' in complaint[0] %}👥
+            {% elif 'Clean' in complaint[0] %}🧹
+            {% elif 'Positive' in complaint[0] %}🌟
+            {% elif 'Menu' in complaint[0] %}📄
+            {% elif 'Payment' in complaint[0] %}💳
+            {% elif 'Facility' in complaint[0] %}🏢
+            {% else %}📅
+            {% endif %}
+            {{ complaint[0] }}
+          </div>
+          
+          <!-- Extract priority from feedback text -->
+          {% if 'Priority: High' in complaint[1] %}
+            <span class="priority-badge priority-high">🔴 HIGH PRIORITY</span>
+          {% elif 'Priority: Medium' in complaint[1] %}
+            <span class="priority-badge priority-medium">🟡 MEDIUM</span>
+          {% elif 'Priority: Low' in complaint[1] %}
+            <span class="priority-badge priority-low">🟢 LOW</span>
+          {% endif %}
+        </div>
+        
+        <!-- Extract and display structured information -->
+        <div class="feedback-meta">
+          {% set lines = complaint[1].split('\n') %}
+          {% for line in lines %}
+            {% if 'Feedback from:' in line %}
+              <div><strong>📧 {{ line }}</strong></div>
+            {% elif 'Date:' in line %}
+              <div>📅 {{ line }}</div>
+            {% elif 'Type:' in line %}
+              <span class="feedback-type">{{ line.replace('Type: ', '') }}</span>
+            {% elif 'Overall Rating:' in line %}
+              <div class="rating-display">⭐ {{ line }}</div>
+            {% elif 'Category Ratings:' in line %}
+              <div class="rating-display">📊 {{ line }}</div>
+            {% elif 'Contact Preference:' in line %}
+              <div>📞 {{ line }}</div>
+            {% endif %}
+          {% endfor %}
+        </div>
+        
+        <div class="complaint-text">
+          <!-- Now complaint[2] contains the clean description processed by backend -->
+          {{ complaint[2] if complaint[2] else 'No description provided' }}
+        </div>
+        
+        <div class="complaint-actions">
+          <button class="action-btn resolve-btn" onclick="markResolved('{{ complaint[0] }}', {{ loop.index }})">
+            ✅ Mark as Resolved
+          </button>
+          <button class="action-btn delete-btn" onclick="deleteComplaint('{{ complaint[0] }}', {{ loop.index }})">
+            🗑️ Delete
+          </button>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="no-complaints">
+      <h3>📝 No Complaints</h3>
+      <p>Great! No complaints have been submitted yet.</p>
+      <p>Keep up the excellent service!</p>
+    </div>
+    {% endif %}
+  </div>
+
+  <script>
+    function markResolved(complaintId, cardIndex) {
+      const confirmation = confirm('Mark this complaint as resolved?');
+      if (confirmation) {
+        // For now, just show a success message. This can be extended to update database status
+        alert('✅ Complaint marked as resolved!\n\nNote: This functionality can be extended to update complaint status in the database.');
+      }
+    }
+
+    function deleteComplaint(complaintId, cardIndex) {
+      const confirmation = confirm('⚠️ Are you sure you want to delete this complaint?\n\nThis action cannot be undone.');
+      if (confirmation) {
+        // Make AJAX request to delete complaint
+        fetch('/admin/delete-complaint', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            complaint_id: complaintId
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert('🗑️ ' + data.message);
+            // Remove the complaint card from the DOM
+            const complaintCards = document.querySelectorAll('.complaint-card');
+            if (complaintCards[cardIndex - 1]) {
+              complaintCards[cardIndex - 1].remove();
+            }
+            // Refresh the page to update the complaint count
+            window.location.reload();
+          } else {
+            alert('❌ Error: ' + data.message);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('❌ Error deleting complaint. Please try again.');
+        });
+      }
+    }
+  </script>
+</body>
+</html>

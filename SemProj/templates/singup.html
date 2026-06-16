@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - Recess Bites</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: url("{{ url_for('static', filename='images/BGG1.jpg') }}") no-repeat center center/cover;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(1px);
+      padding: 20px;
+    }
+
+    .signup-box {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 15px;
+      padding: 40px 50px;
+      width: 400px;
+      color: #fff;
+      text-align: center;
+      box-shadow: 0 0 25px rgba(0,0,0,0.5);
+    }
+
+    .signup-box h2 {
+      margin-bottom: 25px;
+      font-size: 30px;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: 1px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .input-box {
+      position: relative;
+      margin-bottom: 20px;
+      flex: 1;
+    }
+
+    .input-box input {
+      width: 100%;
+      padding: 12px 15px;
+      border: none;
+      outline: none;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.3);
+      color: #000;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    .input-box input:focus {
+      background: rgba(255,255,255,0.5);
+    }
+
+    .input-box input::placeholder {
+      color: #000;
+      font-weight: 500;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      outline: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #4CAF50, #2e7d32);
+      color: #fff;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 10px;
+    }
+
+    .btn:hover {
+      background: linear-gradient(135deg, #66bb6a, #388e3c);
+    }
+
+    .links {
+      margin-top: 18px;
+      font-size: 14px;
+    }
+
+    .links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .links a:hover {
+      text-decoration: underline;
+    }
+
+    .flash-messages {
+      margin-bottom: 20px;
+    }
+
+    .flash-message {
+      background: rgba(255, 0, 0, 0.7);
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .back-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .requirements {
+      font-size: 12px;
+      color: #f0f0f0;
+      margin-top: 10px;
+      text-align: left;
+    }
+
+    @media (max-width: 500px) {
+      .input-row {
+        flex-direction: column;
+      }
+      
+      .signup-box {
+        width: 100%;
+        max-width: 350px;
+        padding: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="{{ url_for('index') }}" class="back-btn">← Back</a>
+  
+  <div class="signup-box">
+    <h2>Sign Up</h2>
+    
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for message in messages %}
+            <div class="flash-message">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    
+    <form method="POST" action="{{ url_for('signup') }}">
+      <div class="input-row">
+        <div class="input-box">
+          <input type="text" name="fname" placeholder="First Name" required>
+        </div>
+        <div class="input-box">
+          <input type="text" name="lname" placeholder="Last Name" required>
+        </div>
+      </div>
+      
+      <div class="input-box">
+        <input type="email" name="email" placeholder="Email Address" required>
+      </div>
+      
+      <div class="input-box">
+        <input type="password" name="password" placeholder="Password" required minlength="8">
+      </div>
+      
+      <div class="requirements">
+        <p>• Email must be a valid Gmail address</p>
+        <p>• Password must be at least 8 characters long</p>
+      </div>
+      
+      <button type="submit" class="btn">Sign Up</button>
+      
+      <div class="links">
+        <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

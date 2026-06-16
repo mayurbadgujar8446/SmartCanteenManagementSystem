@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard — Recess Bites</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: url("{{ url_for('static', filename='images/BGG1.jpg') }}") no-repeat center center/cover;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(1px);
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 800px;
+      width: 90%;
+      box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .user-info {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      text-align: center;
+      color: white;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      width: 100%;
+    }
+
+    .action {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 15px;
+      padding: 20px;
+      color: white;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .action:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .emoji {
+      font-size: 2rem;
+      margin-right: 15px;
+      display: block;
+    }
+
+    .label {
+      font-weight: 600;
+      color: white;
+    }
+
+    .logout-btn {
+      background: linear-gradient(135deg, #f44336, #d32f2f) !important;
+    }
+
+    .logout-btn:hover {
+      background: linear-gradient(135deg, #e57373, #f44336) !important;
+    }
+
+    @media (max-width: 768px) {
+      .actions {
+        grid-template-columns: 1fr;
+      }
+      
+      .container {
+        padding: 20px;
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body> 
+  <main class="container">
+    <div class="header">
+      <h1>🍽️ Dashboard</h1>
+      <div class="user-info">
+        <p>Welcome, {{ session.user_name }}!</p>
+        <p>Email: {{ session.user_email }}</p>
+      </div>
+    </div>
+
+    <nav class="actions" aria-label="Canteen actions">
+      <a href="{{ url_for('show_menu') }}" class="action" id="Canteen">
+        <span class="emoji">🍽️</span>
+        <span class="label">Canteen Menu</span>
+      </a>
+      
+      <button class="action" id="deposit" onclick="handleDeposit()">
+        <span class="emoji">💵</span>
+        <span class="label">Deposit Money</span>
+      </button>
+      
+      <button class="action" id="withdraw" onclick="handleWithdraw()">
+        <span class="emoji">💸</span>
+        <span class="label">Withdraw Money</span>
+      </button>
+      
+      <button class="action" id="balance" onclick="checkBalance()">
+        <span class="emoji">🏦</span>
+        <span class="label">Check Balance</span>
+      </button>
+      
+      <button class="action" id="transfer" onclick="handleTransfer()">
+        <span class="emoji">🔄</span>
+        <span class="label">Transfer Money</span>
+      </button>
+      
+      <a href="{{ url_for('feedback') }}" class="action" id="Feedback">
+        <span class="emoji">🙋</span>
+        <span class="label">Feedback</span>
+      </a>
+      
+      <button class="action" id="OrderHistory" onclick="showOrderHistory()">
+        <span class="emoji">🍔</span>
+        <span class="label">Order History</span>
+      </button>
+      
+      <button class="action" id="TransactionHistory" onclick="showTransactionHistory()">
+        <span class="emoji">💳</span>
+        <span class="label">Transaction History</span>
+      </button>
+      
+      <button class="action" id="RewardPoint" onclick="showRewardPoints()">
+        <span class="emoji">🎁</span>
+        <span class="label">Reward Points</span>
+      </button>
+      
+      <a href="{{ url_for('logout') }}" class="action logout-btn" id="Logout">
+        <span class="emoji">🚪</span>
+        <span class="label">Logout</span>
+      </a>
+    </nav>
+  </main>
+
+  <script>
+    function checkBalance() {
+      fetch('/balance')
+        .then(response => response.json())
+        .then(data => {
+          alert(`💰 Your Account Summary:\n\n💵 Balance: ₹${data.balance}\n🎁 RB Points: ${data.points}\n\n💡 Tip: Spend ₹100+ to earn reward points!`);
+        })
+        .catch(error => {
+          alert('Error fetching balance');
+        });
+    }
+
+    function handleDeposit() {
+      const amount = prompt('💰 Enter amount to deposit:');
+      if (amount && !isNaN(amount) && parseFloat(amount) > 0) {
+        fetch('/deposit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            amount: parseFloat(amount)
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert(`✅ ${data.message}\nNew Balance: ₹${data.new_balance}`);
+          } else {
+            alert(`❌ ${data.message}`);
+          }
+        })
+        .catch(error => {
+          alert('Error processing deposit. Please try again.');
+        });
+      }
+    }
+
+    function handleWithdraw() {
+      const amount = prompt('💸 Enter amount to withdraw:');
+      if (amount && !isNaN(amount) && parseFloat(amount) > 0) {
+        fetch('/withdraw', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            amount: parseFloat(amount)
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert(`✅ ${data.message}\nNew Balance: ₹${data.new_balance}`);
+          } else {
+            alert(`❌ ${data.message}`);
+          }
+        })
+        .catch(error => {
+          alert('Error processing withdrawal. Please try again.');
+        });
+      }
+    }
+
+    function handleTransfer() {
+      const email = prompt('📧 Enter recipient email:');
+      if (!email) return;
+      
+      const amount = prompt(`💸 Enter amount to transfer to ${email}:`);
+      if (email && amount && !isNaN(amount) && parseFloat(amount) > 0) {
+        fetch('/transfer', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            recipient_email: email,
+            amount: parseFloat(amount)
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert(`✅ ${data.message}\nNew Balance: ₹${data.new_balance}`);
+          } else {
+            alert(`❌ ${data.message}`);
+          }
+        })
+        .catch(error => {
+          alert('Error processing transfer. Please try again.');
+        });
+      }
+    }
+
+    function showOrderHistory() {
+      window.location.href = '/order-history';
+    }
+
+    function showTransactionHistory() {
+      window.location.href = '/transaction-history';
+    }
+
+    function showRewardPoints() {
+      window.location.href = '/reward-points';
+    }
+  </script>
+</body>
+</html>
