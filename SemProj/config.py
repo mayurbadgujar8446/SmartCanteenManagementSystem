@@ -14,7 +14,7 @@ import sys
 DB_CONFIG = {
     "host": "localhost",
     "user": "root", 
-    "password": "Ahmad@27",  # Change this to your MySQL password
+    "password": "********",  # Change this to your MySQL password
     "database": "Canteen_Database",
     "auth_plugin": "mysql_native_password"
 }
@@ -33,9 +33,9 @@ ADMIN_PASSWORD = "12332112"
 
 # Email Settings for OTP and notifications
 EMAIL_CONFIG = {
-    "user": "recessbites4@gmail.com",
-    "password": "lilg qaim bfgi qjmg",  # App-specific password
-    "smtp_server": "smtp.gmail.com",
+    "user": "*********@gmail.com",
+    "password": "**** **** ****",  # App-specific password
+    "smtp_server": "**********",
     "smtp_port": 587
 }
 
@@ -52,8 +52,7 @@ APP_CONFIG = {
 }
 
 # OTP Settings
-OTP_CONFIG = {
-    "universal_otp": 9226920618,  # Universal OTP for testing
+OTP_CONFIG = { 
     "otp_min": 248764,
     "otp_max": 975243,
     "otp_validity_minutes": 30
